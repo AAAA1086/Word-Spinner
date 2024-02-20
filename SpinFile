@@ -1,0 +1,31 @@
+import random
+
+class Spinner:
+    def __init__(self):
+        self.synonyms_dict = self.read_synonyms_file('synonyms.txt')
+
+    def read_synonyms_file(self, filename):
+        synonyms_dict = {}
+        with open(filename, 'r') as file:
+            for line in file:
+                word, synonyms = line.strip().split(':')
+                synonyms_list = synonyms.split(',')
+                synonyms_dict[word.strip()] = synonyms_list
+        return synonyms_dict
+
+    def spin_text(self, text):
+        words = text.split()
+        spun_text = ""
+        for word in words:
+            # Check if the word is in the synonyms dictionary
+            if word in self.synonyms_dict:
+                # Randomly decide whether to change the word
+                if random.randint(1, 100) > 50:
+                    # Choose a random synonym for the word
+                    synonym = random.choice(self.synonyms_dict[word])
+                    spun_text += synonym + " "
+                else:
+                    spun_text += word + " "
+            else:
+                spun_text += word + " "
+        return spun_text.strip()
